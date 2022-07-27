@@ -3,11 +3,12 @@ import { RevendedorModule } from './revendedor/revendedor.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Revendedor } from './revendedor/revendedor.entity';
 import { AuthModule } from './auth/auth.module';
+import { ComprasModule } from './compras/compras.module';
+import { Compras } from './compras/compras.entity';
 
 
 @Module({
-  imports: [
-    RevendedorModule,
+  imports: [    
       TypeOrmModule.forRoot({
         type: 'mysql',
         host: 'localhost',
@@ -15,10 +16,11 @@ import { AuthModule } from './auth/auth.module';
         username: 'root',
         password: 'root',
         database: 'testeboticario',
-        entities: [Revendedor],
+        entities: [Revendedor, Compras],
         synchronize: true,
       }),
       AuthModule,
+      ComprasModule,
          
     
   ],

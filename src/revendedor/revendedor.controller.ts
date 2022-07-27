@@ -3,15 +3,19 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateRevendedorDTO } from './dto/create-revendedor.dto';
 import { Revendedor } from './revendedor.entity';
 import { RevendedorService } from './revendedor.service';
+import { AuthService } from '../auth/auth.service';
 
-@Controller('/revendedor')
+@Controller('revendedor')
 export class RevendedorController {
-    constructor(private revendedorService: RevendedorService) {}  
+  constructor(
+    private revendedorService: RevendedorService,
+    private authService: AuthService
+    ) { }  
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
-    return req.user;
+    return this.authService.login(req.user);
   }
 
     @Post()
