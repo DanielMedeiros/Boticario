@@ -5,6 +5,7 @@ import { Revendedor } from './revendedor/revendedor.entity';
 import { AuthModule } from './auth/auth.module';
 import { ComprasModule } from './compras/compras.module';
 import { Compras } from './compras/compras.entity';
+import { CashbackModule } from './cashback/cashback.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { Compras } from './compras/compras.entity';
       }),
       AuthModule,
       ComprasModule,
+      CashbackModule,
          
     
   ],

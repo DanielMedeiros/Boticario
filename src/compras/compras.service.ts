@@ -100,10 +100,12 @@ export class ComprasService {
     }
 
     try {
-      return await this.comprasRepository.createCompras(createComprasDTO);
+      const compras = await this.comprasRepository.createCompras(createComprasDTO);
+      this.logger.log('Compra cadastrada com sucesso.');
+      return compras;
     } catch (error) {
       this.logger.error(`Falha ao cadastrar uma compra,  error ${error}`);
     }
-    this.logger.log('Compra cadastrada com sucesso.');
+    
   }
 }

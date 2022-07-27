@@ -16,10 +16,14 @@ export class RevendedorService {
     async createRevendedor(createRevendedorDTO: CreateRevendedorDTO): Promise<Revendedor> {
         
         try {
-          return await this.revendedorRepository.createRevendedor(createRevendedorDTO);
+          const revendedor = await this.revendedorRepository.createRevendedor(createRevendedorDTO);
+          this.logger.log('Revendedor criado com sucesso.');
+          return revendedor;
         } catch (error) {
-          this.logger.error(`Failed to create revendedor,  error ${error}`);
+          this.logger.error(`Falha ao criar um revendedor,  error ${error}`);
         }
+
+        
       }
 
   async findOne(email: string): Promise<Revendedor | undefined> {
