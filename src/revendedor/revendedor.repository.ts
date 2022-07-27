@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateRevendedorDTO } from './dto/create-revendedor.dto';
 import { Revendedor } from './revendedor.entity';
+import * as bcrypt from 'bcrypt';
 
 @EntityRepository(Revendedor)
 export class RevendedorRepository extends Repository<Revendedor> {
@@ -9,12 +10,16 @@ export class RevendedorRepository extends Repository<Revendedor> {
     
     const { nome, cpf, email, senha } =
       createRevendedorDTO;
+    //const password = senha;
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(senha, salt);
 
     const revendedor = this.create({
       nome,
       cpf,
       email,
-      senha
+      senha: hashedPassword
     });
     
     await this.save(revendedor);

@@ -21,6 +21,10 @@ export class RevendedorService {
           this.logger.error(`Failed to create revendedor,  error ${error}`);
         }
       }
+
+  async findOne(email: string): Promise<Revendedor | undefined> {
+    return this.revendedorRepository.findOne({ email: email });
+  }
 }
 
 
