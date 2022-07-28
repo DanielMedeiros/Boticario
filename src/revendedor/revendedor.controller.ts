@@ -4,6 +4,7 @@ import { CreateRevendedorDTO } from './dto/create-revendedor.dto';
 import { Revendedor } from './revendedor.entity';
 import { RevendedorService } from './revendedor.service';
 import { AuthService } from '../auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('revendedor')
 export class RevendedorController {
@@ -18,6 +19,7 @@ export class RevendedorController {
     return this.authService.login(req.user);
   }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     @UsePipes(ValidationPipe)
     createRevendedor(@Body() createRevendedorDTO: CreateRevendedorDTO): Promise<Revendedor> {        

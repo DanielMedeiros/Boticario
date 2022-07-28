@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { CreateRevendedorDTO } from './dto/create-revendedor.dto';
 import { Revendedor } from './revendedor.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +14,15 @@ export class RevendedorService {
       ) {}
 
     async createRevendedor(createRevendedorDTO: CreateRevendedorDTO): Promise<Revendedor> {
+        const { email } = createRevendedorDTO;
+
+        const hasEmail = await this.findOne(email);
+
+        if (hasEmail) {
+          throw new BadRequestException(
+            `Esse email: ${email} já foi cadastrado. `,
+          );
+        }
         
         try {
           const revendedor = await this.revendedorRepository.createRevendedor(createRevendedorDTO);

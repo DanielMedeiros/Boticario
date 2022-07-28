@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Compras } from './compras.entity';
 import { ComprasRepository } from './compras.repository';
@@ -15,6 +15,7 @@ export class ComprasService {
   ) { }
 
 
+  
   async getCompras(): Promise<Compras[]> {
     return await this.comprasRepository.getCompras();
   }
@@ -33,8 +34,7 @@ export class ComprasService {
     
     let comprasCashback = [];
 
-    compras.map((compra)=>{
-      console.log(compra)
+    compras.map((compra)=>{      
       const compraResult = {
         codigo: compra.codigo,
         valor: compra.valor,
