@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CashBackResultDTO {
   @ApiProperty({
@@ -41,7 +41,7 @@ export class CashBackResultDTO {
     type: 'string',
   })
   @IsNotEmpty()  
-  cashbackRecebido: string;
+  cashbackRecebido: number;
 
   @ApiProperty({
     description: 'Status da compra',

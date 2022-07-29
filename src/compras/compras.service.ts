@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Compras } from './compras.entity';
 import { ComprasRepository } from './compras.repository';
@@ -17,7 +17,15 @@ export class ComprasService {
 
   
   async getCompras(): Promise<Compras[]> {
-    return await this.comprasRepository.getCompras();
+    try {
+      return await this.comprasRepository.getCompras();  
+    } catch (error) {
+      this.logger.error(`Não foi possivel listar as compras,  error ${error}`);
+      throw new InternalServerErrorException(
+        'Não foi possivel listar as compras',
+      );
+    }
+
   }
 
   async getComprasByCpf(cpf: string): Promise<CashBackResultDTO[]> {
@@ -30,37 +38,48 @@ export class ComprasService {
       );
     }
 
-    const compras = await this.comprasRepository.getComprasByCpf(cpf);
+
+    try {
+      const compras = await this.comprasRepository.getComprasByCpf(cpf);
     
-    let comprasCashback = [];
+      let comprasCashback = [];
 
-    compras.map((compra)=>{      
-      const compraResult = {
-        codigo: compra.codigo,
-        valor: compra.valor,
-        data: compra.data,
-        porcCashback: this.porcentagemCashBack(compra.valor),
-        cashbackRecebido: this.calculaCashBack(compra.valor),
-        status: compra.status
-      }
+      compras.map((compra) => {
+        const compraResult = {
+          codigo: compra.codigo,
+          valor: compra.valor,
+          data: compra.data,
+          porcCashback: this.porcentagemCashBack(compra.valor),
+          cashbackRecebido: this.calculaCashBack(compra.valor),
+          status: compra.status
+        }
+        
+        comprasCashback.push(compraResult)
+      })
+      
+      return comprasCashback; 
 
-      comprasCashback.push(compraResult)
-    })
+    } catch (error) {
+      this.logger.error(`Não foi possivel listar as compras para esse cpf: ${cpf},  error ${error}`);
+      throw new InternalServerErrorException(
+        'Não foi possivel listar as compras por cpf',
+      );
+    }
 
-    return comprasCashback; 
-    
+
+
   }
 
   porcentagemCashBack(valor: number) {
-    if(valor <= 1000){
+    if(valor <= 1000){      
       return 10+"%";
     }
 
-    if(valor >= 1000 || valor <= 1500){
+    if(valor >= 1000 && valor <= 1500){      
       return 15+"%";
     }
     
-    if(valor >= 1500){
+    if(valor > 1500){      
       return 20+"%";
     }
     
@@ -75,7 +94,7 @@ export class ComprasService {
       return valor * (15 / 100);
     }
     
-    if(valor >= 1500){
+    if(valor > 1500){
       return valor * ( 20 / 100);
     }
     
@@ -105,6 +124,9 @@ export class ComprasService {
       return compras;
     } catch (error) {
       this.logger.error(`Falha ao cadastrar uma compra,  error ${error}`);
+      throw new InternalServerErrorException(
+        'Falha ao cadastrar uma compra',
+      );
     }
     
   }

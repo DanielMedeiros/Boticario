@@ -19,12 +19,12 @@ export class RevendedorController {
     return this.authService.login(req.user);
   }
 
-    @UseGuards(JwtAuthGuard)
-    @Post()
-    @UsePipes(ValidationPipe)
-    createRevendedor(@Body() createRevendedorDTO: CreateRevendedorDTO): Promise<Revendedor> {        
-      return this.revendedorService.createRevendedor(createRevendedorDTO);
-    }
+
+  @Post()
+  @UsePipes(ValidationPipe)
+  createRevendedor(@Body() createRevendedorDTO: CreateRevendedorDTO): Promise<Revendedor> {
+    return this.revendedorService.createRevendedor(createRevendedorDTO);
+  }
 
 
 }

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
+import { EstatusCompras } from '../status-compras.enum';
 
 export class CreateComprasDTO {
   @ApiProperty({
@@ -40,5 +41,5 @@ export class CreateComprasDTO {
     example: 'Em validação',
     type: 'string',
   })  
-  status?: string;
+  status?: EstatusCompras.EM_VALIDACAO;
 }

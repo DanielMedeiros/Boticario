@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { CreateRevendedorDTO } from './dto/create-revendedor.dto';
 import { Revendedor } from './revendedor.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,12 +30,15 @@ export class RevendedorService {
           return revendedor;
         } catch (error) {
           this.logger.error(`Falha ao criar um revendedor,  error ${error}`);
+          throw new InternalServerErrorException(
+            'Falha ao criar um revendedor',
+          );
         }
 
         
       }
 
-  async findOne(email: string): Promise<Revendedor | undefined> {
+  async findOne(email: string): Promise<Revendedor | undefined> {    
     return this.revendedorRepository.findOne({ email: email });
   }
 }
