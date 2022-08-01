@@ -12,7 +12,7 @@ export class Compras {
   valor: number;
 
   @Column()
-  data: string;  
+  data: Date;  
 
   @Column()
   cpf: string;

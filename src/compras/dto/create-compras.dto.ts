@@ -26,7 +26,7 @@ export class CreateComprasDTO {
     type: 'string',
   })
   @IsNotEmpty()  
-  data: string;
+  data: Date;
 
   @ApiProperty({
     description: 'CPF',
