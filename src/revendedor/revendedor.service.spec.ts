@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateRevendedorDTO } from './dto/create-revendedor.dto';
 import { RevendedorRepository } from './revendedor.repository';
 import { RevendedorService } from './revendedor.service';
+import { Chance } from 'chance';
+const chance = new Chance();
 
 describe('RevendedorService', () => {
   let service: RevendedorService;
@@ -27,9 +29,9 @@ describe('RevendedorService', () => {
     service = module.get<RevendedorService>(RevendedorService);
     repository = module.get<RevendedorRepository>(RevendedorRepository);
     mockData = {
-      cpf: '12345678900',
-      email: 'valid@mail.com',
-      nome: 'Fulano de tal',
+      cpf: chance.cpf(),
+      email: chance.email(),
+      nome: chance.string(),
       senha: '1q2w3e',
     } as CreateRevendedorDTO;
   });
@@ -56,10 +58,10 @@ describe('RevendedorService', () => {
       );    
 
       (repository.findOne as jest.Mock).mockRejectedValue(
-        new BadRequestException('Esse email já foi cadastrado.'),
+        new BadRequestException(`Esse email: ${mockData.email} já foi cadastrado.`),
       ); 
       await expect(service.findOne(mockData.email)).rejects.toThrow(
-        new BadRequestException('Esse email já foi cadastrado.'),
+        new BadRequestException(`Esse email: ${mockData.email} já foi cadastrado.`),
       );
     });
 
@@ -73,7 +75,7 @@ describe('RevendedorService', () => {
     });
 
     it('should be return hen repository return', async () => {
-      (repository.createRevendedor as jest.Mock).mockReturnValue(mockData);
+      (repository.createRevendedor as jest.Mock).mockReturnValue(mockData);      
       expect(await service.createRevendedor(mockData)).toEqual(mockData);
     });
 
